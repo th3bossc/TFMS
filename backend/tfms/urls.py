@@ -18,6 +18,11 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
+admin.site.site_header = 'Traffic Fine Management System'
+admin.site.site_title = 'Admin Portal'
+admin.site.index_title = 'Welcome to TFMS Portal'
+
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),

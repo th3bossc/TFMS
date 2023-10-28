@@ -24,5 +24,23 @@ class UserAdminConfig(UserAdmin):
         ),
     )
     
+    
+class VehicleAdminConfig(admin.ModelAdmin):
+    model = Vehicles
+    search_fields = ('reg_no', 'vehicle_type', 'color', 'vehicle_company', 'vehicle_model', 'owner')
+    list_filter = ('reg_no', 'vehicle_type', 'color', 'vehicle_company', 'vehicle_model', 'owner')
+    ordering = ('-reg_no',)
+    list_display = ('reg_no', 'vehicle_type', 'color', 'vehicle_company', 'vehicle_model', 'owner')
+    fieldsets = (
+        (None, {'fields': ('reg_no', 'vehicle_type', 'color', 'vehicle_company', 'vehicle_model', 'owner')}),
+    )
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('reg_no', 'vehicle_type', 'color', 'vehicle_company', 'vehicle_model', 'owner')}
+        ),
+    )
+    
+    
 admin.site.register(User, UserAdminConfig)
-admin.site.register(Vehicles)
+admin.site.register(Vehicles, VehicleAdminConfig)

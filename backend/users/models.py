@@ -75,6 +75,8 @@ class Vehicles(models.Model):
     reg_date = models.DateTimeField(default=timezone.now)
     color = models.CharField(max_length=20)
     vehicle_type = models.CharField(max_length=5, choices=types)
+    vehicle_company = models.CharField(max_length=30)
+    vehicle_model = models.CharField(max_length=30)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     
     def __str__(self):

@@ -12,4 +12,4 @@ class IssuedFineSerializer(serializers.ModelSerializer):
 class TransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transactions
-        fields = ('transaction_id', 'date_paid', 'amount', 'fine_type.fine_name', 'payment_method')
+        fields = ('transaction_id', 'date_paid', 'amount', 'payment_method')

@@ -44,6 +44,9 @@ class IssuedFines(models.Model):
     def save(self, *args, **kwargs):
         self.deadline = self.date_issued + timedelta(days=30)
         super().save(*args, **kwargs)
+        
+    def update(self, *args, **kwargs):
+        super().save(*args, **kwargs)
     
     @property
     def fine_amount(self):
@@ -75,8 +78,8 @@ class Transactions(models.Model):
     transaction_id = models.AutoField(primary_key=True)
     date_paid = models.DateTimeField(default=timezone.now)
     payment_method = models.CharField(max_length=30, choices=methods)
-    issued_fine = models.ForeignKey(IssuedFines, on_delete=models.CASCADE)
-    paid_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    issued_fine = models.ForeignKey(IssuedFines, on_delete=models.PROTECT)
+    paid_by = models.ForeignKey(User, on_delete=models.PROTECT, null=True)
 
     @property
     def amount(self):

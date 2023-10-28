@@ -25,7 +25,7 @@ class IssuedFinesAdminConfig(ModelAdmin):
     search_fields = ('issued_to', 'fine_type')
     list_filter = ('issued_to', 'fine_type', 'status')
     ordering = ('issued_to', '-date_issued')
-    list_display = ('issued_to', 'fine_type', 'fine_amount', 'status')
+    list_display = ('issue_id', 'issued_to', 'fine_type', 'fine_amount', 'status', 'deadline')
     fieldsets = (
         (None, {'fields': ('issued_to', 'fine_type', 'status')}),
     )
@@ -42,7 +42,7 @@ class TransactionAdminConfig(ModelAdmin):
     search_fields = ('issued_fine', 'paid_by')
     list_filter = ('issued_fine',)
     ordering = ('issued_fine', '-date_paid')
-    list_display = ('issued_fine', 'paid_by', 'amount', 'payment_method')
+    list_display = ('transaction_id', 'issued_fine', 'paid_by', 'amount', 'payment_method')
     fieldsets = (
         (None, {'fields': ('issued_fine', 'payment_method')}),
     )

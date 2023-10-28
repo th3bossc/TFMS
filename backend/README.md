@@ -80,12 +80,12 @@ requests.get('http://127.0.0.1:8000/fines/transactions/<transaction_id>', header
 
 - pay an unpaid fine 
 ```
-requests.get('http://127.0.0.1:8000/fines/update/<issue_id>', headers = { 'Authorization' : 'JWT <auth_key>})
+requests.post('http://127.0.0.1:8000/fines/pay/<issue_id>', json= { 'payment_method' : <method> }, headers = { 'Authorization' : 'JWT <auth_key>})
 ```
 
 - extend an overdue fine
 ```
-requests.post('http://127.0.0.1:8000/fines/update/<issue_id>', json= { 'extension' : <days>, 'reason' : <reason> }, headers = { 'Authorization' : 'JWT <auth_key>})
+requests.post('http://127.0.0.1:8000/fines/extend/<issue_id>', json= { 'extension' : <days>, 'reason' : <reason> }, headers = { 'Authorization' : 'JWT <auth_key>})
 ```
 
 - view profile details
@@ -136,13 +136,13 @@ curl -H "Authorization: JWT <auth_key>" http://127.0.0.1:8000/fines/transactions
 
 - pay an unpaid fine 
 ```
-curl -H "Authorization: JWT <auth_key>" http://127.0.0.1:8000/fines/update/<issue_id>
+curl -X POST -H "Authorization: JWT <auth_key>" -d '{"payment_method" : "<method>"}' http://127.0.0.1:8000/fines/pay/<issue_id>
 ```
 
 
 - extend an overdue fine
 ```
-curl -X POST -H "Authorization: JWT <auth_key>" -d '{"extension": "<days>", "reason": "<reason>"}' http://127.0.0.1:8000/fines/update/<issue_id>
+curl -X POST -H "Authorization: JWT <auth_key>" -d '{"extension": "<days>", "reason": "<reason>"}' http://127.0.0.1:8000/fines/extend/<issue_id>
 ```
 
 
@@ -233,11 +233,12 @@ fetch('http://127.0.0.1:8000/fines/transactions/<transaction_id>', {
 
 - pay an unpaid fine 
 ```
-fetch('http://127.0.0.1:8000/fines/update/<issue_id>', {
-  method: 'GET',
+fetch('http://127.0.0.1:8000/fines/pay/<issue_id>', {
+  method: 'POST',
   headers: {
     'Authorization': 'JWT <auth_key>',
   },
+  body : JSON.stringify({ payment_method : '<method>'})
 })
   .then(response => response.json())
   .then(data => console.log(data))
@@ -246,7 +247,7 @@ fetch('http://127.0.0.1:8000/fines/update/<issue_id>', {
 
 - extend an overdue fine
 ```
-fetch('http://127.0.0.1:8000/fines/update/<issue_id>', {
+fetch('http://127.0.0.1:8000/fines/extend/<issue_id>', {
   method: 'POST',  // Change the HTTP method to POST
   headers: {
     'Authorization': 'JWT <auth_key>',

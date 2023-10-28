@@ -57,21 +57,34 @@ class TransactionsDetailView(APIView):
 
 
 
-class FineMethods(APIView):
+class PayFine(APIView):
     permission_classes = [IsAuthenticated]
-    def get(self, request, pk):
+    
+    def post(self, request, pk):
         try:
-            fine = IssuedFines.objects.get(issue_id = pk)
+            fine = IssuedFines.unpaid.get(issue_id = pk)
         except:
             raise NotFound()
         
-        if fine.issued_to != request.user or fine.status == 'paid':
+        if fine.issued_to != request.user:
             raise PermissionDenied()
+    
+        if (request.data.get('payment_method') is None):
+            return Response({
+                'payment_method' : 'This field is required'
+            })
+    
         
-        fine.status = 'paid'
-        fine.update()
+        transaction = Transactions(payment_method = request.data['payment_method'], issued_fine=fine)
+        transaction.save()
         
         return Response({'message': 'Fine paid successfully'})
+    
+    
+
+
+class ExtendFine(APIView):
+    permission_classes = [IsAuthenticated]
         
     def post(self, request, pk):
         # {

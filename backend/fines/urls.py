@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path
-from .views import FinesView, FinesDetailView, TransactionsView, TransactionsDetailView, FineMethods
+from .views import FinesView, FinesDetailView, TransactionsView, TransactionsDetailView, PayFine, ExtendFine
 
 
 app_name = 'fines'
@@ -9,5 +9,6 @@ urlpatterns = [
     path('<int:pk>', FinesDetailView.as_view(), name='fines_detail'),
     path('transactions/', TransactionsView.as_view(), name='transactions'),
     path('transactions/<int:pk>', TransactionsDetailView.as_view(), name='transactions_detail'),
-    path('update/<int:pk>', FineMethods.as_view(), name='pay_or_extend_fine'),
+    path('pay/<int:pk>', PayFine.as_view(), name='pay_fine'),
+    path('extend/<int:pk>', ExtendFine.as_view(), name='extend_fine'),
 ]

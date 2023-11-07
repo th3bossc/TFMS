@@ -25,14 +25,14 @@ class IssuedFinesAdminConfig(ModelAdmin):
     search_fields = ('issued_to', 'fine_type')
     list_filter = ('issued_to', 'fine_type', 'status')
     ordering = ('issued_to', '-date_issued')
-    list_display = ('issue_id', 'issued_to', 'fine_type', 'fine_amount', 'status', 'deadline')
+    list_display = ('issue_id', 'issued_to', 'fine_type', 'vehicle_issued_to', 'fine_amount', 'status', 'deadline')
     fieldsets = (
-        (None, {'fields': ('issued_to', 'fine_type', 'status')}),
+        (None, {'fields': ('issued_to', 'fine_type', 'vehicle_issued_to', 'status')}),
     )
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('issued_to', 'fine_type', 'status')}
+            'fields': ('issued_to', 'fine_type', 'vehicle_issued_to', 'status')}
         ),
     )
     

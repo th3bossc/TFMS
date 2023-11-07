@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models.query import QuerySet
 from django.utils import timezone
-from users.models import User
+from users.models import User, Vehicles
 from datetime import timedelta
 
 # Create your models here.
@@ -37,11 +37,14 @@ class IssuedFines(models.Model):
     issue_id = models.AutoField(primary_key=True)
     date_issued = models.DateTimeField(default=timezone.now)
     issued_to = models.ForeignKey(User, on_delete=models.CASCADE)
+    vehicle_issued_to = models.ForeignKey(Vehicles, on_delete=models.PROTECT, null=True)
     fine_type = models.ForeignKey(FineClasses, on_delete=models.CASCADE)
     status = models.CharField(max_length=10, choices=statuses, default='unpaid')
     deadline = models.DateTimeField()
     
     def save(self, *args, **kwargs):
+        if self.vehicle_issued_to is not None and self.vehicle_issued_to.owner != self.issued_to:
+            raise ValueError("Vehicle does not belong to the user")
         self.deadline = self.date_issued + timedelta(days=30)
         super().save(*args, **kwargs)
         
@@ -80,7 +83,6 @@ class Transactions(models.Model):
     payment_method = models.CharField(max_length=30, choices=methods)
     issued_fine = models.ForeignKey(IssuedFines, on_delete=models.PROTECT)
     paid_by = models.ForeignKey(User, on_delete=models.PROTECT, null=True)
-
     @property
     def amount(self):
         return self.issued_fine.fine_amount

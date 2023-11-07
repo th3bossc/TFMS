@@ -7,9 +7,9 @@ from datetime import timedelta
 # Create your models here.
 class FineClasses(models.Model):
     fine_id = models.AutoField(primary_key=True)
-    fine_name = models.CharField(max_length=30)
+    fine_name = models.CharField(max_length=50)
     amount_percent = models.FloatField()
-    description = models.CharField(max_length=100)
+    description = models.CharField(max_length=200)
     
     def __str__(self):
         return self.fine_name

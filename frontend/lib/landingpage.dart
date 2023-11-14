@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tfms_app/home.dart';
+import 'package:tfms_app/profilePage.dart';
 
 import 'MyVehiclesPage.dart';
 import 'Transactionpage.dart';
@@ -23,26 +24,29 @@ class _LandingPageState extends State<LandingPage> {
   }
   @override
   Widget build(BuildContext context) {
-    List<Widget> screens=[Home(creds:widget.creds),Transactions(creds:widget.creds),Vehicles(creds:widget.creds)];
+    List<Widget> screens=[Home(creds:widget.creds),TransactionsPage(creds:widget.creds),Vehicles(creds:widget.creds)];
     return Scaffold(
-      appBar: appbar(context),
+      appBar: appbar(context,widget.creds),
       bottomNavigationBar:BottomBar(SetScreen: SetScreen,selectedIndex:selectedIndex),
       body: screens[selectedIndex],
     );
   }
 }
 
-PreferredSizeWidget appbar(BuildContext context){
+PreferredSizeWidget appbar(BuildContext context,Creds creds){
   return PreferredSize(
     preferredSize:Size.fromHeight(MediaQuery.of(context).size.height*0.08),
     child: AppBar(
+      foregroundColor: Colors.white,
         backgroundColor:textColor3,
         title:Row(
           children: [
             const Text("TFMS",
               style: TextStyle(color:Colors.white,fontSize: 22,fontWeight:FontWeight.bold ),),
             Spacer(),
-            IconButton(onPressed: (){}, icon: Icon(Icons.person_3_rounded,color: Colors.white,size: 30,))
+            IconButton(onPressed: (){
+              Navigator.push(context,MaterialPageRoute(builder: (context)=>ProfilePage(creds:creds,)));
+            }, icon: Icon(Icons.person_3_rounded,color: Colors.white,size: 30,))
           ],
         ),
     //     leading:Padding(

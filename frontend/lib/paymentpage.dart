@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tfms_app/backend_config.dart';
+import 'package:tfms_app/landingpage.dart';
 import 'globals.dart';
 import 'entities.dart';
 
@@ -8,9 +10,9 @@ List paymentMethods=[["UPI",'assets/cashless-payment.png'],["Card",'assets/credi
 
 
 class PaymentGateway extends StatelessWidget {
-  PaymentGateway({super.key,required this.fine});
+  PaymentGateway({super.key,required this.fine,required this.authToken});
   Fine fine;
-
+  Creds authToken;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -22,7 +24,9 @@ class PaymentGateway extends StatelessWidget {
             PaymentCards(),
           ],
         ),
+        bottomNavigationBar:PayButton(fine: fine,authToken: authToken,),
       ),
+
     );
   }
 }
@@ -76,5 +80,45 @@ class PaymentCards extends StatelessWidget {
         ),
       );
     });
+  }
+}
+
+class PayButton extends StatelessWidget {
+  PayButton({super.key,required this.fine,required this.authToken});
+
+  Fine fine;
+  Creds authToken;
+
+  @override
+  Widget build(BuildContext context) {
+    return  BottomAppBar(
+      color: Colors.white,
+      surfaceTintColor: Colors.white,
+      height: MediaQuery.of(context).size.height*0.11,
+      shadowColor: Colors.black,
+      elevation: 20,
+      child: Row(
+        children: [
+          SizedBox(width: 10,),
+          Text("\u20B9"+" "+fine.fineAmount.toString(),style:TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+          Spacer(),
+          Padding(
+            padding: const EdgeInsets.only(left: 5),
+            child: TextButton(onPressed: () async {
+              showDialog(barrierDismissible:false,context: context, builder: (context)=>Center(child: CircularProgressIndicator()));
+              await backend().payFine(authToken.access_token, paymentMethods[selectedIndex.value][0], fine.issueId);
+              Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>LandingPage(creds:authToken)));
+            }, child: Container(
+                decoration:BoxDecoration(color:paymentColor1,borderRadius:BorderRadius.all(Radius.circular(5))),child: SizedBox(
+              width: MediaQuery.of(context).size.width*0.55,child: Center(
+                child: Text(
+                  "Pay Now",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w700,fontSize: 15),)),
+            ))),
+          )
+
+        ],
+      ),
+
+    );
   }
 }

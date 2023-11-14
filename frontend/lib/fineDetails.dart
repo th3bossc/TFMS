@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tfms_app/globals.dart';
 import 'package:tfms_app/landingpage.dart';
+import 'package:tfms_app/paymentpage.dart';
 
 import 'backend_config.dart';
 import 'entities.dart';
@@ -9,7 +10,7 @@ import 'entities.dart';
 
 class FineDetails extends StatefulWidget {
   FineDetails({super.key,required this.authToken,required this.fineItem});
-  String authToken;
+  Creds authToken=Creds.nullCreds();
   Fine fineItem;
 
   @override
@@ -35,13 +36,13 @@ class _FineDetailsState extends State<FineDetails> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      appBar: appbar(context),
+      appBar: appbar(context,widget.authToken),
       body: SingleChildScrollView(
         child: Column(
           children: [
             DetailsCard(fine: widget.fineItem,),
             SizedBox(height: 40,),
-            Buttons(fine:widget.fineItem),
+            Buttons(fine:widget.fineItem,authToken: widget.authToken,),
           ],
         ),
       ),
@@ -91,7 +92,7 @@ class DetailsCard extends StatelessWidget {
                     children: [
                       Text("Issued to",style: textTitleStyle,),
                       Spacer(),
-                      Text("",style: textContentStyle,),
+                      Text(fine.vehicleNo,style: textContentStyle,),
                     ],
                   ),
                   SizedBox(height: 15,),
@@ -114,15 +115,18 @@ class DetailsCard extends StatelessWidget {
 }
 
 class Buttons extends StatelessWidget {
-  Buttons({super.key,required this.fine});
+  Buttons({super.key,required this.fine,required this.authToken});
 
   Fine fine;
+  Creds authToken;
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        TextButton(onPressed: (){}, child: Center(
+        TextButton(onPressed: (){
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>PaymentGateway(fine: fine,authToken: authToken,)));
+        }, child: Center(
           child: Container(
             color: textColor3,
             child: Padding(

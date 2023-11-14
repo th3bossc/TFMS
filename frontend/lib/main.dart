@@ -36,8 +36,9 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: PaymentGateway(fine: Fine.nullFine()),
+      // home: PaymentGateway(fine: Fine.nullFine()),
       // home: LandingPage(creds: Creds(refresh_token: "", access_token: "")),
+      home:Login(),
     );
   }
 }

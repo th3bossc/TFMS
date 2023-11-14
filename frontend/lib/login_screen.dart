@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tfms_app/backend_config.dart';
 import 'package:tfms_app/entities.dart';
+import 'package:tfms_app/globals.dart';
 import 'package:tfms_app/landingpage.dart';
 
 class Login extends StatefulWidget {
@@ -29,7 +30,9 @@ class _LoginState extends State<Login> {
       });
     }
     else{
+      userProfile=await backend().getProfile(cred.access_token);
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LandingPage(creds: cred)));
+
     }
   }
 

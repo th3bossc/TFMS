@@ -67,6 +67,9 @@ flutter:
     - assets/bank-transfer.png
 
     - assets/credit-card.png
+    - assets/bike.jpg
+    - assets/car.jpg
+    - assets/truck.jpg
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

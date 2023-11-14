@@ -43,7 +43,7 @@ class Home extends StatelessWidget {
             ],
           ),
         ),
-        FineCard(auth_token:creds.access_token),
+        FineCard(auth_token:creds),
 
 
 
@@ -90,7 +90,8 @@ Widget totalCard(double Amount){
 
 class FineCard extends StatefulWidget {
   FineCard({super.key,required this.auth_token});
-  String auth_token="";
+  Creds auth_token=Creds.nullCreds();
+
   @override
   State<FineCard> createState() => _FineCardState();
 }
@@ -98,14 +99,19 @@ class FineCard extends StatefulWidget {
 class _FineCardState extends State<FineCard> {
   List<Fine> fines=[];
   Future<void> refresh() async {
-    fines=await backend().getFines(widget.auth_token);
+    Future.delayed(Duration.zero,(){showDialog(barrierDismissible:false,context: context, builder: (context)=>Center(child: CircularProgressIndicator()));});
+    fines=await backend().getFines(widget.auth_token.access_token);
     double totAmount=0;
     for(int i=0;i<fines.length;i++){
       totAmount+=fines[i].fineAmount;
     }
     amount.value=totAmount;
+    Navigator.of(context).pop('dialog');
     // fines=await backend().getFines(refreshToken);  // HARD CODED
-    setState(() {});
+    if(this.mounted) {
+      setState(() {});
+
+    }
 
   }
   @override
@@ -128,7 +134,7 @@ class _FineCardState extends State<FineCard> {
               padding: const EdgeInsets.fromLTRB(10,0,10,10),
               child: InkWell(
                 onTap: () async {
-                  Fine selectedFine=await backend().getFine(widget.auth_token, fineItem.issueId);
+                  Fine selectedFine=await backend().getFine(widget.auth_token.access_token, fineItem.issueId);
                   Navigator.push(context, MaterialPageRoute(builder:(context)=>FineDetails(authToken:widget.auth_token,fineItem:selectedFine)));
                 },
                 child: Card(

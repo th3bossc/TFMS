@@ -72,6 +72,8 @@ class DetailsCard extends StatelessWidget {
                   SizedBox(height: 20,),
                   Text(fine.fineName,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25),),
                   SizedBox(height: 20,),
+                  Row(children:[ Flexible(child: Text(fine.fineDesc,style: textContentStyle,maxLines: 3,textAlign: TextAlign.center,))]),
+                  SizedBox(height: 20,),
                   Row(
                     children: [
                       Text("Issued on",style: textTitleStyle,),

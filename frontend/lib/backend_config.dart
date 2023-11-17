@@ -19,10 +19,13 @@ class backend{
      return Creds.toCreds(data);
   }
 
-  Future<List<Fine>> getFines(String authToken) async {
+  Future<List<Fine>?> getFines(String authToken) async {
     Uri uri=Uri.parse(url+"/fines/");
     // print(authToken);
     http.Response response=await http.get(uri,headers: {"Authorization":"JWT ${authToken}"});
+    if(response.statusCode==401){
+      return null;
+    }
     print(response.body);
     List<dynamic> data=jsonDecode(response.body);
 

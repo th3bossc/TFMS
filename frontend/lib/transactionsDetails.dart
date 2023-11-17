@@ -59,6 +59,16 @@ class transDetailsCard extends StatelessWidget {
                   SizedBox(height: 20,),
                   // Text(trans.,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25),),
                   // SizedBox(height: 20,),
+
+
+                  Row(
+                    children: [
+                      Text("Fine issued for",style: textTitleStyle,),
+                      Spacer(),
+                      Flexible(child: Text(trans.fineType,style: textContentStyle,textAlign: TextAlign.end,)),
+                    ],
+                  ),
+                  SizedBox(height: 15,),
                   Row(
                     children: [
                       Text("Transaction ID",style: textTitleStyle,),

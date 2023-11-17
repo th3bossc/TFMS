@@ -4,6 +4,7 @@ import 'package:tfms_app/fineDetails.dart';
 
 import 'entities.dart';
 import 'globals.dart';
+import 'login_screen.dart';
 
 // String refreshToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTcwMDA3MTcwMSwiaWF0IjoxNjk5MjA3NzAxLCJqdGkiOiIzYTQwNDg0NDAyMTU0ZTVmYjAzNDcyNzVkN2I0YWNkYiIsInVzZXJfaWQiOiIxMjM0MTIzNCJ9.kSTq1Q0y05gQhNPiq0CyLAYWwtCU7k9yAh5FA3Ry3eI";
 
@@ -25,22 +26,25 @@ class Home extends StatelessWidget {
         Material(
 
           elevation: 4,
-          child: Column(
-            children: [
-              ValueListenableBuilder(
-                
-                valueListenable: amount,
-                builder: (context,double value,child){
-                  return SizedBox(
-                      height:MediaQuery.of(context).size.height*0.3,
-                      child: totalCard(value));}
+          child: SizedBox(
+            width:MediaQuery.of(context).size.width,
+            child: Column(
+              children: [
+                ValueListenableBuilder(
 
-              ),
-              SizedBox(height: 30,),
-              Container(decoration:BoxDecoration(border: Border(bottom: BorderSide(width: 2,color:textColor1))),
+                  valueListenable: amount,
+                  builder: (context,double value,child){
+                    return SizedBox(
+                        height:MediaQuery.of(context).size.height*0.3,
+                        child: totalCard(value,context));}
+
+                ),
+                SizedBox(height: 30,),
+                Container(decoration:BoxDecoration(border: Border(bottom: BorderSide(width: 2,color:textColor1))),
     child: Text("Active Fines",style: TextStyle(color:textColor1 ,fontSize: 20,fontWeight: FontWeight.w500),)),
-              SizedBox(height: 20,),
-            ],
+                SizedBox(height: 20,),
+              ],
+            ),
           ),
         ),
         FineCard(auth_token:creds),
@@ -52,38 +56,43 @@ class Home extends StatelessWidget {
   }
 }
 
-Widget totalCard(double Amount){
+Widget totalCard(double Amount,BuildContext context){
 
   return Padding(
     padding: const EdgeInsets.all(20.0),
-    child: Card(
-      elevation: 10,
-      surfaceTintColor: Colors.white,
-      color: cardColor,
-      child: Row(
+    child: SizedBox(
+      width: MediaQuery.of(context).size.width*0.9,
+      child: Card(
+        elevation: 10,
+        surfaceTintColor: Colors.white,
+        color: cardColor,
+        child: Row(
 
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left:15.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height:30),
-                Text("Amount Due:",style: TextStyle(fontSize: 20,color:textColor2,fontWeight: FontWeight.w500)),
-                SizedBox(height:5),
-                // SizedBox(width: 5),//ruppee+Amount.toString()
-                FittedBox(fit:BoxFit.fitWidth,child: Text(ruppee+Amount.toString(),style: TextStyle(fontSize: 45,color:textColor2,fontWeight: FontWeight.w600)))
-              ],
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(left:15.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height:30),
+                    Text("Amount Due:",style: TextStyle(fontSize: 20,color:textColor2,fontWeight: FontWeight.w500)),
+                    SizedBox(height:5),
+                    // SizedBox(width: 5),//ruppee+Amount.toString()
+                    Expanded(child: Text(ruppee+Amount.toString(),textAlign:TextAlign.justify,maxLines:2,overflow:TextOverflow.ellipsis,style: TextStyle(fontSize: 45,color:textColor2,fontWeight: FontWeight.w600))),
+                  ],
+                ),
+              ),
             ),
-          ),
-          Spacer(),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20,20,0,20),
-            child: SizedBox(height:140,width:130,child: Image(image: AssetImage('assets/logo.webp'),color: cardColor,colorBlendMode: BlendMode.multiply,))),
+            // Spacer(),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20,20,0,20),
+              child: SizedBox(height:140,width:130,child: Image(image: AssetImage('assets/logo.webp'),color: cardColor,colorBlendMode: BlendMode.multiply,))),
 
-        ],
+          ],
+        ),
+
       ),
-
     ),
   );
 }
@@ -97,13 +106,16 @@ class FineCard extends StatefulWidget {
 }
 
 class _FineCardState extends State<FineCard> {
-  List<Fine> fines=[];
+  List<Fine>? fines=[];
   Future<void> refresh() async {
     Future.delayed(Duration.zero,(){showDialog(barrierDismissible:false,context: context, builder: (context)=>Center(child: CircularProgressIndicator()));});
     fines=await backend().getFines(widget.auth_token.access_token);
+    if(fines==null){
+      Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (context)=>Login()), (route) => false);
+    }
     double totAmount=0;
-    for(int i=0;i<fines.length;i++){
-      totAmount+=fines[i].fineAmount;
+    for(int i=0;i<fines!.length;i++){
+      totAmount+=fines![i].fineAmount;
     }
     amount.value=totAmount;
     Navigator.of(context).pop('dialog');
@@ -127,12 +139,12 @@ class _FineCardState extends State<FineCard> {
 
         children: [
           SizedBox(height: 10,),
-          (fines.length==0)? const SizedBox(height:300,child: Align(alignment:Alignment.center,child: Text("No Active Fines",style: TextStyle(color: Colors.grey,fontSize: 20),))):Expanded(
+          (fines!.length==0)? const SizedBox(height:300,child: Align(alignment:Alignment.center,child: Text("No Active Fines",style: TextStyle(color: Colors.grey,fontSize: 20),))):Expanded(
             child: ListView.builder(
               shrinkWrap: true,
-              itemCount: fines.length,
+              itemCount: fines!.length,
                 itemBuilder: (context,index){
-                Fine fineItem=fines[index];
+                Fine fineItem=fines![index];
                 return Padding(
                   padding: const EdgeInsets.fromLTRB(10,0,10,10),
                   child: InkWell(

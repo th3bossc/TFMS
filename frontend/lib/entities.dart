@@ -14,7 +14,7 @@ class Creds{
 }
 
 class Fine{
-  Fine({required this.issueId,required this.dateIssued,required this.fineName,required this.status,required this.deadLine,required this.fineAmount,required this.vehicleNo});
+  Fine({required this.issueId,required this.dateIssued,required this.fineName,required this.status,required this.deadLine,required this.fineAmount,required this.vehicleNo,required this.fineDesc});
 
   int issueId;
   String dateIssued;
@@ -23,13 +23,14 @@ class Fine{
   String deadLine;
   double fineAmount;
   String vehicleNo;
+  String fineDesc;
   static toFine(Map<String,dynamic> data){
     return Fine(issueId:data["issue_id"], dateIssued: data["date_issued"], fineName: data["fine_name"], status: data["status"],
-        deadLine:data["deadline"], fineAmount: data["fine_amount"],vehicleNo: data["vehicle_issued_to"]["reg_no"]);
+        deadLine:data["deadline"], fineAmount: data["fine_amount"],vehicleNo: data["vehicle_issued_to"]["reg_no"],fineDesc:data["fine_desc"] );
 
   }
   static nullFine(){
-    return Fine(issueId: 0, dateIssued: "", fineName: "", status: "", deadLine: "", fineAmount: 0.0,vehicleNo: "");
+    return Fine(issueId: 0, dateIssued: "", fineName: "", status: "", deadLine: "", fineAmount: 0.0,vehicleNo: "",fineDesc: "");
   }
 
 
@@ -40,10 +41,12 @@ class Transactions{
   String datePaid;
   double amount;
   String paymentMethod;
-  Transactions({required this.transId,required this.datePaid,required this.amount,required this.paymentMethod});
+  String fineType;
+
+  Transactions({required this.transId,required this.datePaid,required this.amount,required this.paymentMethod,required this.fineType});
   
   static toTransactions(Map<String,dynamic> data){
-    return Transactions(transId: data["transaction_id"], datePaid: data["date_paid"], amount: data["amount"], paymentMethod: data["payment_method"]);
+    return Transactions(transId: data["transaction_id"], datePaid: data["date_paid"], amount: data["amount"], paymentMethod: data["payment_method"],fineType:data["fine_type"]);
   }
 }
 

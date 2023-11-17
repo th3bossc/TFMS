@@ -119,10 +119,13 @@ class Buttons extends StatelessWidget {
 
   Fine fine;
   Creds authToken;
+
+  TextEditingController daysCon=TextEditingController();
+  TextEditingController reasonCon=TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         TextButton(onPressed: (){
           Navigator.push(context, MaterialPageRoute(builder: (context)=>PaymentGateway(fine: fine,authToken: authToken,)));
@@ -146,9 +149,20 @@ class Buttons extends StatelessWidget {
           ),
         )),
          SizedBox(height: 40),
-         Visibility(
-           //visible: (fine.status=="overdue"),  // SETTING VISIBILITY
-           child: TextButton(onPressed: (){}, child: Center(
+        
+        SizedBox(height: 20,),
+        Visibility(visible:(fine.status=="overdue"),child: SizedBox(width:MediaQuery.of(context).size.width*0.7,child: TextFormField(controller:daysCon,decoration: InputDecoration(border:OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),hintText: "Days required"),))),
+        SizedBox(height: 20,),
+        Visibility(visible:(fine.status=="overdue"),child: SizedBox(width:MediaQuery.of(context).size.width*0.7,child: TextFormField(controller:reasonCon,decoration: InputDecoration(border:OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),hintText: "Reason for Extention"),))),
+        SizedBox(height: 20,),
+        Visibility(
+          visible: (fine.status=="overdue"),  // SETTING VISIBILITY
+          child: TextButton(onPressed: () async {
+            showDialog(barrierDismissible:false,context: context, builder: (context)=>Center(child: CircularProgressIndicator()));
+            await backend().extendDeadline(authToken.access_token, fine.issueId, int.parse(daysCon.text), reasonCon.text);
+            Navigator.of(context).pop();
+            Navigator.pop(context);
+          }, child: Center(
             child: Container(
               color: textColor3,
               child: const Padding(
@@ -166,8 +180,8 @@ class Buttons extends StatelessWidget {
                 ),
               ),
             ),
-        )),
-         ),
+          )),
+        ),
       ],
     );
   }

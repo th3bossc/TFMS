@@ -1,11 +1,26 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:tfms_app/entities.dart';
 import 'package:tfms_app/landingpage.dart';
 import 'package:tfms_app/paymentpage.dart';
 
+import 'backend_config.dart';
+import 'globals.dart';
 import 'login_screen.dart';
 
-void main() {
+bool logging=true;
+String? data=null;
+Creds creds=Creds.nullCreds();
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  data=await FlutterSecureStorage().read(key:"login_creds");
+  if(data!=null){
+    creds=Creds.toCreds(jsonDecode(data!));
+    userProfile=await backend().getProfile(creds.access_token);
+  }
+  print(data);
   runApp(const MyApp());
 }
 
@@ -15,6 +30,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
+    
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -38,7 +55,8 @@ class MyApp extends StatelessWidget {
       ),
       // home: PaymentGateway(fine: Fine.nullFine()),
       // home: LandingPage(creds: Creds(refresh_token: "", access_token: "")),
-      home:Login(),
+
+      home:data!=null?LandingPage(creds:creds,):Login(),
     );
   }
 }

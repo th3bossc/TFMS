@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'entities.dart';
 import 'globals.dart';
 import 'landingpage.dart';
+
+Map<String,String> images={"LMV":"assets/car_full.jpg","MCWG":"assets/bike_full.jpg","MCWOG":"assets/scooter_full.jpg","HMV":"assets/truck_full.jpg"};
+
 class VehicleDetails extends StatelessWidget {
   VehicleDetails({super.key,required this.authToken,required this.vehicle});
   Creds authToken=Creds.nullCreds();
@@ -15,7 +18,7 @@ class VehicleDetails extends StatelessWidget {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.only(top: 30,bottom: 20),
         child: IconButton(splashRadius:0.2,onPressed: () {
-          Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>LandingPage(creds:authToken)));
+          Navigator.pop(context);
         }, icon: Icon(Icons.home,color: textColor3,size: 40,shadows: [Shadow(color: textColor1,blurRadius: 100)],),
 
         ),
@@ -23,11 +26,13 @@ class VehicleDetails extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            SizedBox(height: 40),
+            SizedBox(height:100,child: Image.asset(images[vehicle.vehicleType]!)),
             vehicleDetailsCard(vehicle: vehicle,),
           ],
         ),
       ),
-    );;
+    );
   }
 }
 
@@ -39,7 +44,7 @@ class vehicleDetailsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: SingleChildScrollView(child: Padding(
-        padding:  EdgeInsets.only(top:MediaQuery.of(context).size.height*0.25),
+        padding:  EdgeInsets.only(top:50),
         child: Card(
           color: cardColor,
           surfaceTintColor: Colors.white,

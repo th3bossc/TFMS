@@ -23,7 +23,9 @@ class backend{
     Uri uri=Uri.parse(url+"/fines/");
     // print(authToken);
     http.Response response=await http.get(uri,headers: {"Authorization":"JWT ${authToken}"});
+    print(response.body);
     List<dynamic> data=jsonDecode(response.body);
+
     // print(data);
     // String data=response.body;
     // print(jsonDecode(response.body)[0]);
@@ -106,12 +108,23 @@ class backend{
   }
 
   static updateProfile(String authToken,String phoneNo,String fName,String lName,String email,double salary) async {
-    Uri uri=Uri.parse(url+"/users/profile");
+    Uri uri=Uri.parse("$url/users/profile/");
     print(salary);
-    http.Response response=await http.post(uri,headers: {"Authorization":"JWT ${authToken}"},body: {"phone_no":phoneNo,"first_name":fName,"last_name":lName,"email":email,"salary":salary});
+    http.Response response=await http.post(uri,headers: {'Content-Type': 'application/json',"Authorization":"JWT $authToken"},body: jsonEncode({"phone_no":phoneNo,"first_name":fName,"last_name":lName,"email":email,"salary":salary}));
     print(response.body);
     // Map<String,dynamic> data=jsonDecode(response.body);
     // print(data["message"]);
+  }
+
+  extendDeadline(String authToken,int issueId,int days,String reason) async {
+    Uri uri=Uri.parse("$url/fines/extend/$issueId");
+    print(uri);
+    // print(authToken);
+    // print(days.toString()+reason);
+    http.Response response=await http.post(uri,headers: {'Content-Type': 'application/json',"Authorization":"JWT ${authToken}"},body:jsonEncode({"extension":days,"reason":reason}));
+    print(response.body);
+    // print(response.statusCode);
+
   }
 
 

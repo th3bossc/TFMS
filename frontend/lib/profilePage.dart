@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:tfms_app/backend_config.dart';
+import 'package:tfms_app/login_screen.dart';
 
 import 'entities.dart';
 import 'globals.dart';
@@ -71,10 +73,22 @@ class _ProfilePageState extends State<ProfilePage> {
                   SizedBox(height: 30,),
                   Text("Email",style:titleStyle),
                   SizedBox(width:MediaQuery.of(context).size.width*0.75,child: TextFormField(controller:emailCon,style: contentStyle,enabled: editing,)),
+                  SizedBox(height: 30,),
+
+
 
                 ],
               ),
             ),
+            Center(
+              child: ElevatedButton(onPressed: (){
+                FlutterSecureStorage().delete(key: "login_creds");
+                Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (context)=>Login()), (route) => false);
+              },
+                  style: ElevatedButton.styleFrom(foregroundColor: Colors.white,backgroundColor: textColor3),
+                  child: Text("Logout")),
+            ),
+            SizedBox(height: 30,),
 
 
 

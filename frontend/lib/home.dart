@@ -71,15 +71,15 @@ Widget totalCard(double Amount){
                 SizedBox(height:30),
                 Text("Amount Due:",style: TextStyle(fontSize: 20,color:textColor2,fontWeight: FontWeight.w500)),
                 SizedBox(height:5),
-                // SizedBox(width: 5),
-                Text(Amount.toString(),style: TextStyle(fontSize: 45,color:textColor2,fontWeight: FontWeight.w600))
+                // SizedBox(width: 5),//ruppee+Amount.toString()
+                FittedBox(fit:BoxFit.fitWidth,child: Text(ruppee+Amount.toString(),style: TextStyle(fontSize: 45,color:textColor2,fontWeight: FontWeight.w600)))
               ],
             ),
           ),
           Spacer(),
           Padding(
             padding: const EdgeInsets.fromLTRB(20,20,0,20),
-            child: SizedBox(height:140,child: Image(image: AssetImage('assets/logo.webp'),color: cardColor,colorBlendMode: BlendMode.multiply,))),
+            child: SizedBox(height:140,width:130,child: Image(image: AssetImage('assets/logo.webp'),color: cardColor,colorBlendMode: BlendMode.multiply,))),
 
         ],
       ),
@@ -122,50 +122,55 @@ class _FineCardState extends State<FineCard> {
   }
   Widget build(BuildContext context) {
 
-    return Column(
-      children: [
-        SizedBox(height: 10,),
-        ListView.builder(
-          shrinkWrap: true,
-          itemCount: fines.length,
-            itemBuilder: (context,index){
-            Fine fineItem=fines[index];
-            return Padding(
-              padding: const EdgeInsets.fromLTRB(10,0,10,10),
-              child: InkWell(
-                onTap: () async {
-                  Fine selectedFine=await backend().getFine(widget.auth_token.access_token, fineItem.issueId);
-                  Navigator.push(context, MaterialPageRoute(builder:(context)=>FineDetails(authToken:widget.auth_token,fineItem:selectedFine)));
-                },
-                child: Card(
-                  color: cardColor,
-                  elevation: 3,
-                  surfaceTintColor: Colors.white,
-                  child: SizedBox(
-                    // height: 75,
+    return Expanded(
+      child: Column(
 
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [Text(fineItem.fineName,style: TextStyle(fontSize: 20,color:textColor1),),
-                              SizedBox(height: 5),
-                              Text(fineItem.dateIssued.substring(0,10),style: TextStyle(fontSize: 13,fontWeight: FontWeight.w400),)],
+        children: [
+          SizedBox(height: 10,),
+          (fines.length==0)? const SizedBox(height:300,child: Align(alignment:Alignment.center,child: Text("No Active Fines",style: TextStyle(color: Colors.grey,fontSize: 20),))):Expanded(
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: fines.length,
+                itemBuilder: (context,index){
+                Fine fineItem=fines[index];
+                return Padding(
+                  padding: const EdgeInsets.fromLTRB(10,0,10,10),
+                  child: InkWell(
+                    onTap: () async {
+                      Fine selectedFine=await backend().getFine(widget.auth_token.access_token, fineItem.issueId);
+                      Navigator.push(context, MaterialPageRoute(builder:(context)=>FineDetails(authToken:widget.auth_token,fineItem:selectedFine)));
+                    },
+                    child: Card(
+                      color: cardColor,
+                      elevation: 3,
+                      surfaceTintColor: Colors.white,
+                      child: SizedBox(
+                        // height: 75,
+
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [Text(fineItem.fineName,style: TextStyle(fontSize: 20,color:textColor1),),
+                                  SizedBox(height: 5),
+                                  Text(fineItem.dateIssued.substring(0,10),style: TextStyle(fontSize: 13,fontWeight: FontWeight.w400),)],
+                              ),
+                              Spacer(),
+                              Text(fineItem.fineAmount.toString(),style: TextStyle(fontSize: 20,fontWeight:FontWeight.w400,color: textColor1),)
+
+                            ],
                           ),
-                          Spacer(),
-                          Text(fineItem.fineAmount.toString(),style: TextStyle(fontSize: 20,fontWeight:FontWeight.w400,color: textColor1),)
-
-                        ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ),
-            );
-            }),
-      ],
+                );
+                }),
+          ),
+        ],
+      ),
     );
   }
 }

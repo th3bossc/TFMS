@@ -17,8 +17,8 @@ class IssuedFineSerializer(serializers.ModelSerializer):
         return data
         
         
-    class TransactionSerializer(serializers.ModelSerializer):
-        fine_type = serializers.CharField(source='issued_fine.fine_type.fine_name')
-        class Meta:
-            model = Transactions
-            fields = ('transaction_id', 'date_paid', 'amount', 'fine_type', 'payment_method')
+class TransactionSerializer(serializers.ModelSerializer):
+    fine_type = serializers.CharField(source='issued_fine.fine_type.fine_name')
+    class Meta:
+        model = Transactions
+        fields = ('transaction_id', 'date_paid', 'amount', 'fine_type', 'payment_method')

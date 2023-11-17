@@ -15,7 +15,7 @@ class UserAdminConfig(UserAdmin):
     list_display = ('aadhar_no', 'phone_no', 'license_no', 'first_name', 'last_name', 'email', 'is_active', 'is_staff')
     fieldsets = (
         (None, {'fields': ('aadhar_no', 'phone_no', 'license_no', 'first_name', 'last_name', 'email', 'salary', 'password')}),
-        ('Permissions', {'fields': ('is_staff', 'is_active')}),
+        ('Permissions', {'fields': ('is_staff', 'is_active', 'user_permissions')},),
     )
     add_fieldsets = (
         (None, {

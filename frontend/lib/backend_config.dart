@@ -102,11 +102,15 @@ class backend{
     return Transactions.toTransactions(data);
   }
 
-  Future<Profile> getProfile(String authToken) async{
+  Future<Profile?> getProfile(String authToken) async{
     Uri uri=Uri.parse(url+"/users/profile");
     http.Response response=await http.get(uri,headers: {"Authorization":"JWT ${authToken}"});
+    if(response.statusCode==401){
+      return null;
+    }
     Map<String,dynamic> data=jsonDecode(response.body);
     print(data);
+
     return Profile.toProfile(data);
   }
 

@@ -15,10 +15,15 @@ String? data=null;
 Creds creds=Creds.nullCreds();
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  FlutterSecureStorage().write(key: "login_creds",value: jsonEncode(
+          {"refresh": "cred.refresh_token", "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAwMDY4NzE5LCJpYXQiOjE2OTk5ODIzMTksImp0aSI6IjM1NWE2ZmQyNGU2YzQyMWY4OTZlOGYzNjk0NDgxNjVkIiwidXNlcl9pZCI6IjEyMzQxMjM0In0.1oQZcAOsDfig-3Eff-bOcrswHIe9vxmCDajte09r4tg"}));
   data=await FlutterSecureStorage().read(key:"login_creds");
   if(data!=null){
     creds=Creds.toCreds(jsonDecode(data!));
     userProfile=await backend().getProfile(creds.access_token);
+    if(userProfile==null){
+      data=null;
+    }
   }
   print(data);
   runApp(const MyApp());

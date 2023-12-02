@@ -1,6 +1,5 @@
 # TFMS BACKEND
 Traffic Fine ManageMent System (TFMS) is fine management system created as part of DBMS S6 course
-The project
 
 ## TABLE OF CONTENTS
 - [Overview](#overview)

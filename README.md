@@ -1,5 +1,5 @@
 # TRAFFIC FINE MANAGEMENT SYSTEM
-Traffic Fine ManageMent System (TFMS) is fine management system created as part of DBMS S6 course
+A Database Management System (DBMS) project designed for Semester 5, the Traffic Fine Management System (TFMS) efficiently tracks, manages, and processes traffic violation fines, ensuring streamlined record-keeping and effective penalty management as well as payment transactions of each user. Furethermore, the project offers an admin interface for a prospective admin panel to manage the entire database securely offering separate interface for the same
 
 ## TABLE OF CONTENTS
 - [Overview](#overview)

@@ -67,4 +67,4 @@ A Database Management System (DBMS) project designed for Semester 5, the Traffic
 - [Abel Mani Roy](https://github.com/abelmaniroy/)
 - [Sreeshma Sangesh](https://github.com/sreeshu123)
 - [Anuj Suhas Haval](https://github.com/AnujHaval)
-- [B Hemanth](https://github.com)
+- [B Hemanth](https://github.com/BeerakamHemanth)
